@@ -18,6 +18,7 @@ libcanvas_plugin_la_SOURCES = video_filter/canvas.c
 libcolorthres_plugin_la_SOURCES = video_filter/colorthres.c
 libcolorthres_plugin_la_LIBADD = $(LIBM)
 libcroppadd_plugin_la_SOURCES = video_filter/croppadd.c
+libdecrypt_plugin_la_SOURCES = video_filter/decrypt.c
 liberase_plugin_la_SOURCES = video_filter/erase.c
 libextract_plugin_la_SOURCES = video_filter/extract.c
 libextract_plugin_la_LIBADD = $(LIBM)
@@ -77,6 +78,7 @@ video_filter_LTLIBRARIES = \
 	libcanvas_plugin.la \
 	libcolorthres_plugin.la \
 	libcroppadd_plugin.la \
+	libdecrypt_plugin.la \
 	libedgedetection_plugin.la \
 	liberase_plugin.la \
 	libextract_plugin.la \
