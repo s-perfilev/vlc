@@ -1,14 +1,16 @@
-Read **howto** compile VLC: https://wiki.videolan.org/OSXCompile/
+Read howto compile VLC: https://wiki.videolan.org/OSXCompile/
 
-***
+================================================================================
 
 Rebuild:
 
     $ ../extras/package/macosx/rebuild.sh
 
+
 Run:
 
     $ ./VLC.app/Contents/MacOS/VLC
+
 
 Run with filter:
 
