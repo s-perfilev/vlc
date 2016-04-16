@@ -46,15 +46,25 @@ static picture_t *Filter( filter_t *, picture_t * );
 /*****************************************************************************
  * Module descriptor
  *****************************************************************************/
+#define META_TEXT N_("Metadata file")
+#define META_LONGTEXT N_("The path to the file that contains metadata.")
+
+#define FILTER_PREFIX "decrypt-"
+
 vlc_module_begin ()
     set_description( N_("Decrypt video filter") )
     set_shortname( N_("Decryptiong" ))
     set_category( CAT_VIDEO )
     set_subcategory( SUBCAT_VIDEO_VFILTER )
     set_capability( "video filter2", 0 )
+
+    add_string( FILTER_PREFIX "meta", "", META_TEXT, META_LONGTEXT, false )
+
     add_shortcut( "decrypt" )
     set_callbacks( Create, Destroy )
 vlc_module_end ()
+
+static const char *const ppsz_filter_options[] = { "meta", NULL };
 
 /*****************************************************************************
  * Create: allocates Invert video thread output method
@@ -65,11 +75,14 @@ static int Create( vlc_object_t *p_this )
 {
     filter_t *p_filter = (filter_t *)p_this;
     vlc_fourcc_t fourcc = p_filter->fmt_in.video.i_chroma;
+    char *path_to_meta;
 
+    /* Only YUVA is supported */
     if( fourcc == VLC_CODEC_YUVP || fourcc == VLC_CODEC_RGBP
      || fourcc == VLC_CODEC_RGBA || fourcc == VLC_CODEC_ARGB )
         return VLC_EGENERIC;
 
+    /* Chroma checking */
     const vlc_chroma_description_t *p_chroma =
         vlc_fourcc_GetChromaDescription( fourcc );
     if( p_chroma == NULL || p_chroma->plane_count == 0
@@ -77,6 +90,18 @@ static int Create( vlc_object_t *p_this )
         return VLC_EGENERIC;
 
     p_filter->pf_video_filter = Filter;
+
+    /* Parse configs */
+    config_ChainParse( p_filter, FILTER_PREFIX, ppsz_filter_options,
+                   p_filter->p_cfg );
+
+    path_to_meta = var_CreateGetNonEmptyStringCommand( p_filter,
+                                                       FILTER_PREFIX "meta" );
+
+    printf("%s\n", path_to_meta);
+
+    /* Parse file */
+
     return VLC_SUCCESS;
 }
 
